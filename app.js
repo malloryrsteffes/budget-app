@@ -21,12 +21,41 @@ let budgetController = (function() {
 
   let data = {
     allItems: {
-      expenses: [],
-      incomes: []
+      exp: [],
+      inc: []
     },
     totals: {
-      expenses: 0,
-      incomes: 0
+      exp: 0,
+      inc: 0
+    }
+  };
+
+  // Public method that allows other modules to add a new item to our data structure
+  return {
+    addItem: function(type, des, val) {
+      let newItem, id;
+
+      // Create new ID. If there are no items, the first ID = 0
+      if (data.allItems[type].length > 0) {
+        id = data.allItems[type][data.allItems[type].length - 1].id + 1;
+      } else {
+        id = 0;
+      }
+
+      // Create new item based on inc or exp type
+      if (type === "inc") {
+        newItem = new Income(id, des, val);
+      } else if (type === "exp") {
+        newItem = new Expense(id, des, val);
+      }
+
+      // push the data to our data structure
+      data.allItems[type].push(newItem);
+      // Return the new element
+      return newItem;
+    },
+    testing: function() {
+      console.log(data);
     }
   };
 })();
@@ -79,12 +108,17 @@ let appController = (function(budgetCtrl, UICtrl) {
     });
   };
 
-  // Control add item function that we can pass to both event listeners
+  // Controller add item function that we can pass to both event listeners
   // This way we don't have to write the code twice
   let ctrlAddItem = function() {
-    // 1. Get the input data from the user
+    // 1. Get the input data from the user as an object
     let input = UICtrl.getInput();
     // 2. Add the item to the budget controller
+    let newItem = budgetCtrl.addItem(
+      input.type,
+      input.description,
+      input.value
+    );
     // 3. Add the new item to the UI
     // 4. Calculate the new budget
     // 5. Display the new budget on the UI
