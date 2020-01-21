@@ -80,7 +80,7 @@ let UIController = (function() {
       return {
         type: document.querySelector(DOMstrings.inputType).value, // Will be either inc or exp
         description: document.querySelector(DOMstrings.inputDescription).value,
-        value: document.querySelector(DOMstrings.inputValue).value
+        value: parseFloat(document.querySelector(DOMstrings.inputValue).value)
       };
     },
     addListItem: function(obj, type) {
@@ -161,12 +161,19 @@ let appController = (function(budgetCtrl, UICtrl) {
       input.description,
       input.value
     );
-    // 3. Add the new item to the UI
+    // 3a. Add the new item to the UI
     UICtrl.addListItem(newItem, input.type);
 
     // 3b. Clear the input fields
     UICtrl.clearFields();
+
+    // Calculate and update budget
+    updateBudget();
+  };
+
+  let updateBudget = function() {
     // 4. Calculate the new budget
+    // 4a. Return the budget
     // 5. Display the new budget on the UI
   };
 
