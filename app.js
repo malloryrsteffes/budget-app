@@ -105,6 +105,24 @@ let UIController = (function() {
       // 3. Insert the HTML into the DOM
       document.querySelector(element).insertAdjacentHTML("beforeend", newHtml);
     },
+
+    // Public method to clear fields
+    clearFields: function() {
+      // querySelectorAll returns a list, NOT an array
+      let fields = document.querySelectorAll(
+        DOMstrings.inputDescription + ", " + DOMstrings.inputValue
+      );
+
+      // We will use the slice method on the list (tricking JS, essentially)
+      let fieldsArray = Array.prototype.slice.call(fields);
+
+      // Clear each field using forEach
+      fieldsArray.forEach(function(current, index, array) {
+        current.value = "";
+      });
+
+      fieldsArray[0].focus();
+    },
     // Exposes the DOMstrings to the public
     getDOMstrings: function() {
       return DOMstrings;
@@ -144,7 +162,10 @@ let appController = (function(budgetCtrl, UICtrl) {
       input.value
     );
     // 3. Add the new item to the UI
-    UIController.addListItem(newItem, input.type);
+    UICtrl.addListItem(newItem, input.type);
+
+    // 3b. Clear the input fields
+    UICtrl.clearFields();
     // 4. Calculate the new budget
     // 5. Display the new budget on the UI
   };
