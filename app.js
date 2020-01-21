@@ -155,20 +155,23 @@ let appController = (function(budgetCtrl, UICtrl) {
   let ctrlAddItem = function() {
     // 1. Get the input data from the user as an object
     let input = UICtrl.getInput();
-    // 2. Add the item to the budget controller
-    let newItem = budgetCtrl.addItem(
-      input.type,
-      input.description,
-      input.value
-    );
-    // 3a. Add the new item to the UI
-    UICtrl.addListItem(newItem, input.type);
+    // only execute below code IF we have data:
+    if (input.description !== "" && !isNaN(input.value) && input.value > 0) {
+      // 2. Add the item to the budget controller
+      let newItem = budgetCtrl.addItem(
+        input.type,
+        input.description,
+        input.value
+      );
+      // 3a. Add the new item to the UI
+      UICtrl.addListItem(newItem, input.type);
 
-    // 3b. Clear the input fields
-    UICtrl.clearFields();
+      // 3b. Clear the input fields
+      UICtrl.clearFields();
 
-    // Calculate and update budget
-    updateBudget();
+      // Calculate and update budget
+      updateBudget();
+    }
   };
 
   let updateBudget = function() {
